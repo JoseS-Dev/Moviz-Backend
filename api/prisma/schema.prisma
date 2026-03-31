@@ -88,6 +88,11 @@ model users {
   updated_at DateTime @updatedAt
   sessions sessions[]
   favoriteMovies favoriteMovies[]
+  reviews reviews[]
+  userBadges userBadges[]
+  notifications notifications[]
+  userPromotions userPromotions[]
+  bookings bookings[]
   @@map("users")
 }
 
@@ -123,6 +128,7 @@ model footage {
   updated_at DateTime @updatedAt
   favoriteMovies favoriteMovies[]
   showtimes showtimes[]
+  reviews reviews[]
   @@map("footage")
 }
 
@@ -168,6 +174,10 @@ model seats {
   type_seat TypeSeat
   is_available Boolean @default(true)
   is_accessible Boolean @default(false)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  rooms rooms @relation(fields: [room_id], references: [id])
+  reservedSeats reservedSeats[]
   @@map("seats")
 }
 
@@ -207,6 +217,7 @@ model bookings {
   users users @relation(fields: [user_id], references: [id])
   showtimes showtimes @relation(fields: [showtime_id], references: [id])
   staff staff? @relation(fields: [staff_id], references: [id])
+  reservedSeats reservedSeats[]
   @@map("bookings")
 }
 
@@ -246,6 +257,7 @@ model badges {
   is_active Boolean @default(true)
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+  userBadges userBadges[]
   @@map("badges")
 }
 
@@ -287,6 +299,7 @@ model promotions {
   is_active Boolean @default(true)
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+  userPromotions userPromotions[]
   @@map("promotions")
 }
 
