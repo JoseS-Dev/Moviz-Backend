@@ -1,47 +1,43 @@
 import {
+    CanActivate,
+    ExecutionContext,
     Injectable,
-    NestMiddleware,
     UnauthorizedException,
 } from '@nestjs/common';
-import { Request, Response, NextFunction } from 'express';
 import { PrismaService } from '../../../../prisma.service.js';
 import { JwtService } from '@nestjs/jwt';
 import { SessionAutheticationResponse } from '../session.constants.js';
 import { settings } from '../../../../../config/settings.config.js';
 
-function extractTokenFromHeader(req: Request): string | null {
-    const authHeader = req.headers.authorization;
-    if(!authHeader || !authHeader.startsWith('Bearer ')) return null;
-    const token = authHeader.split(' ')[1];
-    return token;
-}
-
-interface RequestWithUser extends Request {
-    user?: SessionAutheticationResponse;
-}
-
 // Clase del middleware de autenticación de sesión
 @Injectable()
-export class SessionAuthenticationMiddleware implements NestMiddleware {
+export class SessionGuard implements CanActivate {
     constructor(private prisma: PrismaService, private jwtService: JwtService) {}
 
-    async use(req: RequestWithUser, res: Response, next: NextFunction){
-        const token = extractTokenFromHeader(req);
-        if(!token) return new UnauthorizedException('No se proporcionó un token de autenticación');
-        try {
+    private extractTokenFromHeader(req: any) : string | null {
+       const [type, token] = req.headers.authorization?.split(' ') ?? [];
+       return type === 'Bearer' ? token : null; 
+    }
+
+    async canActivate(context: ExecutionContext): Promise<boolean> {
+        const req = context.switchToHttp().getRequest();
+        const token = this.extractTokenFromHeader(req);
+        if(!token) throw new UnauthorizedException('No se propocion el token de autorización');
+        try{
             const secret = settings.jwtSecretKey;
-            if(!secret) throw new Error('No se ha configurado la clave secreta para JWT');
-            const decoded = this.jwtService.verify(token, { secret }) as SessionAutheticationResponse;
-            if(!decoded.sub) throw new UnauthorizedException('Token de autenticación inválido');
+            // Se verifica el JWT
+            const payload = await this.jwtService.verifyAsync(token, {secret});
+            // Verifica si la session esta activa en la base de datos
             const session = await this.prisma.sessions.findFirst({
-                where: { token }
+                where: {token: token}
             });
-            if(!session) throw new UnauthorizedException('Token de autenticación no válido o sesión cerrada');
-            req.user = decoded;
-            next();
+            if(!session) throw new UnauthorizedException('Sesión no encontrada');
+            // Si hay una sesión se inyecta en la pertición el payload
+            req['user'] = payload
+            return true 
         }
         catch(error){
-            throw new UnauthorizedException('Token de autenticación inválido o expirado');
+           throw new UnauthorizedException('Token inválido o sesión expirada'); 
         }
     }
 }
