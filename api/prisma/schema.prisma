@@ -169,7 +169,7 @@ model rooms {
 model seats {
   id Int @id @default(autoincrement())
   room_id Int
-  raw_number Int
+  row_number String
   seat_number Int
   type_seat TypeSeat
   is_available Boolean @default(true)
@@ -178,6 +178,7 @@ model seats {
   updated_at DateTime @updatedAt
   rooms rooms @relation(fields: [room_id], references: [id])
   reservedSeats reservedSeats[]
+  @@unique([room_id, row_number, seat_number])
   @@map("seats")
 }
 
