@@ -1,8 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './entities/user.entity';
-import { PrismaService } from '../../../prisma.service';
+import { CreateUserDto } from './dto/create-user.dto.js';
+import { UpdateUserDto } from './dto/update-user.dto.js';
+import { User } from './entities/user.entity.js';
+import { PrismaService } from '../../../prisma.service.js';
 import bcryptjs from 'bcryptjs';
 
 @Injectable()
@@ -41,7 +41,6 @@ export class UsersService {
       skip: skip,
       take: limit,
     });
-    if(users.length === 0) throw new BadRequestException("No se encontraron usuarios.");
     return { users, total: totalUsers };
   }
 
@@ -77,7 +76,10 @@ export class UsersService {
     // Se actualiza el usuario
     const updatedUser = await this.prisma.users.update({
       where: { id: id },
-      data: updateUserDto
+      data: {
+        ...updateUserDto,
+        updated_at: new Date()
+      }
     });
     if(!updatedUser) throw new BadRequestException("No se pudo actualizar el usuario.");
     return updatedUser;

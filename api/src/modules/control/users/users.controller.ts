@@ -11,9 +11,9 @@ import {
   Res,
 } from '@nestjs/common';
 import type { Request, Response } from 'express';
-import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UsersService } from './users.service.js';
+import { CreateUserDto } from './dto/create-user.dto.js';
+import { UpdateUserDto } from './dto/update-user.dto.js';
 
 @Controller('users')
 export class UsersController {
@@ -53,11 +53,11 @@ export class UsersController {
 
   @Get(':id')
   async findOne(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Req() req: Request,
     @Res() res: Response
   ) {
-    const result = await this.usersService.findOne(+id);
+    const result = await this.usersService.findOne(id);
     return res.status(200).json({
       message: "Usuario obtenido exitosamente",
       data: result,
@@ -66,12 +66,12 @@ export class UsersController {
 
   @Patch(':id')
   async update(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Body() updateUserDto: UpdateUserDto,
     @Req() req: Request,
     @Res() res: Response
   ) {
-    const result = await this.usersService.update(+id, updateUserDto);
+    const result = await this.usersService.update(id, updateUserDto);
     return res.status(200).json({
       message: "Usuario actualizado exitosamente",
       data: result,
@@ -80,11 +80,11 @@ export class UsersController {
 
   @Delete(':id')
   async remove(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Req() req: Request,
     @Res() res: Response
   ) {
-    const result = await this.usersService.remove(+id);
+    const result = await this.usersService.remove(id);
     return res.status(200).json({
       message: "Usuario eliminado exitosamente",
       data: result,

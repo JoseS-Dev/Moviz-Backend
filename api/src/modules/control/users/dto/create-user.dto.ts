@@ -4,21 +4,21 @@ import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 export class CreateUserDto {
     @IsString()
     @IsNotEmpty()
-    names: string;
+    names!: string;
 
     @IsString()
     @IsNotEmpty()
-    last_names: string;
+    last_names!: string;
 
     @IsEmail()
     @IsNotEmpty()
-    email: string;
+    email!: string;
 
     @IsString()
     @IsNotEmpty()
-    password_hash: string;
+    password_hash!: string;
 
     @IsString()
     @IsNotEmpty()
-    username: string;
+    username!: string;
 }
