@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "sessions" ALTER COLUMN "token" DROP NOT NULL;

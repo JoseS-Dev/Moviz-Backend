@@ -99,8 +99,8 @@ model users {
 // Modelo para el inicio de sesión de un usuario
 model sessions {
   id Int @id @default(autoincrement())
-  user_id Int
-  token String @unique
+  user_id Int 
+  token String? @unique
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   users users @relation(fields: [user_id], references: [id])
