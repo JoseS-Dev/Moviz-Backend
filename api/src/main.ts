@@ -5,25 +5,28 @@ import { AllExceptionsFilter } from './common/filters/all-exception.filter.js';
 import { settings } from '../config/settings.config.js';
 import morgan from 'morgan';
 
-
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(morgan('dev'));
-  
-  app.setGlobalPrefix(settings.basePath)
-  app.useGlobalFilters(new AllExceptionsFilter())
-  app.useGlobalPipes(new DefaultValuePipe({
-    whiteList: true,
-    transform: true
-  }))
+
+  app.setGlobalPrefix(settings.basePath);
+  app.useGlobalFilters(new AllExceptionsFilter());
+  app.useGlobalPipes(
+    new DefaultValuePipe({
+      whiteList: true,
+      transform: true,
+    }),
+  );
 
   app.enableCors({
     origin: settings.corsOrigin,
     credentials: true,
   });
-  
+
   await app.listen(settings.port, () => {
-    console.log(`Servidor escuchando en http://localhost:${settings.port}${settings.basePath}`);
+    console.log(
+      `Servidor escuchando en http://localhost:${settings.port}${settings.basePath}`,
+    );
   });
 }
 bootstrap();
