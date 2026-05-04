@@ -1,15 +1,15 @@
-import { 
-  Controller, 
-  Get, 
-  Post, 
-  Body, 
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
   Patch,
-  Param, 
+  Param,
   Delete,
   HttpCode,
   HttpStatus,
   ParseIntPipe,
-  Query 
+  Query,
 } from '@nestjs/common';
 import { RoomService } from './room.service.js';
 import { CreateRoomDto } from './dto/create-room.dto.js';
@@ -21,14 +21,12 @@ export class RoomController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  async create(
-    @Body() createRoomDto: CreateRoomDto,
-  ) {
+  async create(@Body() createRoomDto: CreateRoomDto) {
     const result = await this.roomService.create(createRoomDto);
     return {
       success: true,
       message: 'Se ha creado la sala exitosamente',
-      data: result
+      data: result,
     };
   }
 
@@ -46,58 +44,53 @@ export class RoomController {
         page: Number(page),
         limit: Number(limit),
         total: result.total,
-      }
-    }
+      },
+    };
   }
 
   @Get(':id')
-  async findOne(
-    @Param('id', ParseIntPipe) id: number,
-  ) {
+  async findOne(@Param('id', ParseIntPipe) id: number) {
     const result = await this.roomService.findOne(id);
     return {
       success: true,
       message: 'Se ha obtenido la información de la sala exitosamente',
-      data: result
-    }
+      data: result,
+    };
   }
 
   @Patch(':id')
   async update(
-    @Param('id', ParseIntPipe) id: number, 
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateRoomDto: UpdateRoomDto,
   ) {
-    const result = await this.roomService.update(id, updateRoomDto)
+    const result = await this.roomService.update(id, updateRoomDto);
     return {
       success: true,
       message: 'Se ha actualidado la sala exitosamente',
-      data: result
-    }
+      data: result,
+    };
   }
 
   @Patch(':id/status')
   async changeStatus(
     @Param('id', ParseIntPipe) id: number,
     @Body('isActive') isActive: boolean,
-  ){
+  ) {
     const result = await this.roomService.changeStatus(id, isActive);
     return {
       success: true,
       message: `se ha cambiado el estado de la sala ${isActive ? 'Activado' : 'Desactivado'}`,
-      data: result
-    }
+      data: result,
+    };
   }
 
   @Delete(':id')
-  async remove(
-    @Param('id', ParseIntPipe) id: number,
-  ) {
+  async remove(@Param('id', ParseIntPipe) id: number) {
     const result = await this.roomService.remove(id);
     return {
       success: true,
       message: 'Se ha eliminado la sala exitosamente',
-      data: result
-    }
-    
+      data: result,
+    };
   }
 }
