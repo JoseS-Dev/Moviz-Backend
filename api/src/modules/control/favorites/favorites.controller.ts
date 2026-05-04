@@ -1,14 +1,14 @@
-import { 
+import {
   Controller,
-  Get, 
-  Post, 
-  Body, 
-  Patch, 
-  Param, 
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
   Query,
   HttpCode,
   HttpStatus,
-  ParseIntPipe 
+  ParseIntPipe,
 } from '@nestjs/common';
 import { FavoritesService } from './favorites.service.js';
 import { CreateFavoriteDto } from './dto/create-favorite.dto.js';
@@ -20,15 +20,13 @@ export class FavoritesController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  async create(
-    @Body() createFavoriteDto: CreateFavoriteDto,
-  ) {
+  async create(@Body() createFavoriteDto: CreateFavoriteDto) {
     const result = await this.favoritesService.create(createFavoriteDto);
     return {
       success: true,
       message: 'Se ha creado un favorito exitosamente',
-      data: result
-    }
+      data: result,
+    };
   }
 
   @Get('user/:userId')
@@ -45,21 +43,21 @@ export class FavoritesController {
       meta: {
         page: page,
         limit: limit,
-        total: result.total
-      }
-    }
+        total: result.total,
+      },
+    };
   }
 
   @Patch(':id')
   async update(
-    @Param('id', ParseIntPipe) id: number, 
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateFavoriteDto: UpdateFavoriteDto,
   ) {
     const result = await this.favoritesService.update(id, updateFavoriteDto);
     return {
       success: true,
       message: `Se ha actualizado el estado de favorito a ${updateFavoriteDto.is_favorite ? 'Activado' : 'Desactivado'}`,
-      data: result
-    }
+      data: result,
+    };
   }
 }

@@ -1,15 +1,15 @@
-import { 
-  Controller, 
-  Get, 
-  Post, 
-  Body, 
-  Patch, 
-  Param, 
-  Delete, 
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
   ParseIntPipe,
   HttpCode,
   HttpStatus,
-  Query 
+  Query,
 } from '@nestjs/common';
 import { SeatsService } from './seats.service.js';
 import { CreateSeatDto } from './dto/create-seat.dto.js';
@@ -21,15 +21,13 @@ export class SeatsController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  async create(
-    @Body() createSeatDto: CreateSeatDto,
-  ) {
+  async create(@Body() createSeatDto: CreateSeatDto) {
     const result = await this.seatsService.create(createSeatDto);
     return {
       success: true,
       message: 'Se ha creado la silla exitosamente',
-      data: result
-    }
+      data: result,
+    };
   }
 
   @Get('room/:roomId')
@@ -46,33 +44,31 @@ export class SeatsController {
       meta: {
         page: page,
         limit: limit,
-        total: result.total
-      }
-    }
+        total: result.total,
+      },
+    };
   }
 
   @Get(':id')
-  async findOne(
-    @Param('id', ParseIntPipe) id: number,
-  ) {
+  async findOne(@Param('id', ParseIntPipe) id: number) {
     const result = await this.seatsService.findOne(id);
-    return{
+    return {
       success: true,
       message: 'Se ha obtenido la silla exitosamente',
-      data: result
-    }
+      data: result,
+    };
   }
 
   @Patch(':id')
   async update(
-    @Param('id', ParseIntPipe) id: number, 
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateSeatDto: UpdateSeatDto,
   ) {
     const result = await this.seatsService.update(id, updateSeatDto);
     return {
       success: true,
       message: 'Se ha actualizado la información de la silla exitosamente',
-      data: result
+      data: result,
     };
   }
 
@@ -80,24 +76,22 @@ export class SeatsController {
   async changeStatusAvailable(
     @Param('id', ParseIntPipe) id: number,
     @Body('isActive') isActive: boolean,
-  ){
+  ) {
     const result = await this.seatsService.changeStatusAvailable(id, isActive);
     return {
       success: true,
       message: `Se ha cambiado el estado de la silla ha ${isActive ? 'Disponible' : 'Ocupado'}`,
-      data: result
-    }
+      data: result,
+    };
   }
 
   @Delete(':id')
-  async remove(
-    @Param('id', ParseIntPipe) id: number,
-  ) {
+  async remove(@Param('id', ParseIntPipe) id: number) {
     const result = await this.seatsService.remove(id);
     return {
       success: true,
       message: 'Se ha eliminado la silla exitosamente',
-      data: result
-    }
+      data: result,
+    };
   }
 }

@@ -1,15 +1,15 @@
-import { 
-  Controller, 
-  Get, 
-  Post, 
-  Body, 
-  Patch, 
-  Param, 
-  Delete, 
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
   Query,
   ParseIntPipe,
   HttpCode,
-  HttpStatus
+  HttpStatus,
 } from '@nestjs/common';
 import { UsersService } from './users.service.js';
 import { CreateUserDto } from './dto/create-user.dto.js';
@@ -21,13 +21,11 @@ export class UsersController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  async create(
-    @Body() createUserDto: CreateUserDto,
-  ) {
+  async create(@Body() createUserDto: CreateUserDto) {
     const result = await this.usersService.create(createUserDto);
-    return{
+    return {
       success: true,
-      message: "Usuario creado exitosamente",
+      message: 'Usuario creado exitosamente',
       data: result,
     };
   }
@@ -40,24 +38,22 @@ export class UsersController {
     const result = await this.usersService.findAll(page, limit);
     return {
       success: true,
-      message: "Usuarios obtenidos exitosamente",
+      message: 'Usuarios obtenidos exitosamente',
       data: result,
       meta: {
         page: Number(page),
         limit: Number(limit),
         total: result.total,
-      }
+      },
     };
   }
 
   @Get(':id')
-  async findOne(
-    @Param('id', ParseIntPipe) id: number
-  ) {
+  async findOne(@Param('id', ParseIntPipe) id: number) {
     const result = await this.usersService.findOne(id);
     return {
       success: true,
-      message: "Usuario obtenido exitosamente",
+      message: 'Usuario obtenido exitosamente',
       data: result,
     };
   }
@@ -70,19 +66,17 @@ export class UsersController {
     const result = await this.usersService.update(id, updateUserDto);
     return {
       success: true,
-      message: "Usuario actualizado exitosamente",
-      data: result
+      message: 'Usuario actualizado exitosamente',
+      data: result,
     };
   }
 
   @Delete(':id')
-  async remove(
-    @Param('id', ParseIntPipe) id: number,
-  ) {
+  async remove(@Param('id', ParseIntPipe) id: number) {
     const result = await this.usersService.remove(id);
     return {
       success: true,
-      message: "Usuario eliminado exitosamente",
+      message: 'Usuario eliminado exitosamente',
       data: result,
     };
   }
