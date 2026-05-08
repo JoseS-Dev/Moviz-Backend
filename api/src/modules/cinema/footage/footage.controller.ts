@@ -22,12 +22,7 @@ export class FootageController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createFootageDto: CreateFootageDto) {
-    const result = await this.footageService.create(createFootageDto);
-    return {
-      success: true,
-      message: 'Se ha creado la pelicula exitosamente',
-      data: result,
-    };
+    return await this.footageService.create(createFootageDto);
   }
 
   @Get()
@@ -35,27 +30,12 @@ export class FootageController {
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 10,
   ) {
-    const result = await this.footageService.findAll(page, limit);
-    return {
-      success: true,
-      message: 'Peliculas obtenidas exitosamente',
-      data: result.footages,
-      meta: {
-        page: Number(page),
-        limit: Number(limit),
-        total: result.total,
-      },
-    };
+    return await this.footageService.findAll(page, limit);
   }
 
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
-    const result = await this.footageService.findOne(id);
-    return {
-      success: true,
-      message: 'Pelicula obtenida exitosamente',
-      data: result,
-    };
+    return await this.footageService.findOne(id);
   }
 
   @Patch(':id')
@@ -63,12 +43,7 @@ export class FootageController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateFootageDto: UpdateFootageDto,
   ) {
-    const result = await this.footageService.update(id, updateFootageDto);
-    return {
-      success: true,
-      message: 'Pelicula actualizada exitosamente',
-      data: result,
-    };
+    return await this.footageService.update(id, updateFootageDto);
   }
 
   @Patch(':id/status')
@@ -76,21 +51,11 @@ export class FootageController {
     @Param('id', ParseIntPipe) id: number,
     @Body('isActive') isActive: boolean,
   ) {
-    const result = await this.footageService.changeStatus(id, isActive);
-    return {
-      success: true,
-      message: `se ha cambiado el estado de la pelicula ${isActive ? 'Activado' : 'Desactivado'}`,
-      data: result,
-    };
+    return await this.footageService.changeStatus(id, isActive);
   }
 
   @Delete(':id')
   async remove(@Param('id', ParseIntPipe) id: number) {
-    const result = await this.footageService.remove(id);
-    return {
-      success: true,
-      message: 'Pelicula elimina exitosamente',
-      data: result,
-    };
+    return await this.footageService.remove(id);
   }
 }
