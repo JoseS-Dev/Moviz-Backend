@@ -22,12 +22,7 @@ export class ShowtimesController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createShowtimeDto: CreateShowtimeDto) {
-    const result = await this.showtimesService.create(createShowtimeDto);
-    return {
-      success: true,
-      message: 'La función ha sido creada exitosamente',
-      data: result,
-    };
+    return await this.showtimesService.create(createShowtimeDto);
   }
 
   @Get()
@@ -36,17 +31,7 @@ export class ShowtimesController {
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 10,
   ) {
-    const result = await this.showtimesService.findAll(page, limit);
-    return {
-      success: true,
-      message: 'Las funciones se han obtenido exitosamente',
-      data: result.showtimes,
-      meta: {
-        page: Number(page),
-        limit: Number(limit),
-        total: result.total,
-      },
-    };
+    return await this.showtimesService.findAll(page, limit);
   }
 
   @Get('room/:id')
@@ -56,32 +41,13 @@ export class ShowtimesController {
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 10,
   ) {
-    const result = await this.showtimesService.findAllByRoom(
-      roomId,
-      page,
-      limit,
-    );
-    return {
-      success: true,
-      message: 'Las funciones se han obtenido exitosamente',
-      data: result.showtimes,
-      meta: {
-        page: Number(page),
-        limit: Number(limit),
-        total: result.total,
-      },
-    };
+    return await this.showtimesService.findAllByRoom(roomId,page,limit,);
   }
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   async findOne(@Param('id', ParseIntPipe) id: number) {
-    const result = await this.showtimesService.findOne(id);
-    return {
-      success: true,
-      message: 'La función ha sido obtenida exitosamente',
-      data: result,
-    };
+    return await this.showtimesService.findOne(id);
   }
 
   @Patch(':id')
@@ -90,22 +56,12 @@ export class ShowtimesController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateShowtimeDto: UpdateShowtimeDto,
   ) {
-    const result = await this.showtimesService.update(id, updateShowtimeDto);
-    return {
-      success: true,
-      message: 'La función ha sido actualizada exitosamente',
-      data: result,
-    };
+   return await this.showtimesService.update(id, updateShowtimeDto);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
   async remove(@Param('id', ParseIntPipe) id: number) {
-    const result = await this.showtimesService.remove(id);
-    return {
-      success: true,
-      message: 'La función ha sido eliminada exitosamente',
-      data: result,
-    };
+    return await this.showtimesService.remove(id);
   }
 }

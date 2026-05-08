@@ -11,30 +11,19 @@ export class SessionController {
 
   @Post('/login')
   async login(@Body() createSessionDto: CreateSessionDto) {
-    const result = await this.sessionService.login(createSessionDto);
-    return {
-      success: true,
-      message: 'Inicio de sesión exitoso',
-      data: result,
-    };
+    return await this.sessionService.login(createSessionDto);
   }
 
   @Post('logout')
   @UseGuards(SessionGuard)
   async logout(@User() user: SessionAutheticationResponse) {
-    const result = await this.sessionService.logout(user.sub);
-    return {
-      success: true,
-      message: 'Cierre de sesión exitoso',
-      data: result,
-    };
+    return await this.sessionService.logout(user.sub);
   }
 
   @Get('/verify')
   @UseGuards(SessionGuard)
   async verify(@User() user: SessionAutheticationResponse) {
     return {
-      success: true,
       message: 'Usuario autenticado',
       isAuthenticated: true,
       user: user,

@@ -21,12 +21,7 @@ export class FavoritesController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createFavoriteDto: CreateFavoriteDto) {
-    const result = await this.favoritesService.create(createFavoriteDto);
-    return {
-      success: true,
-      message: 'Se ha creado un favorito exitosamente',
-      data: result,
-    };
+    return await this.favoritesService.create(createFavoriteDto);
   }
 
   @Get('user/:userId')
@@ -35,17 +30,7 @@ export class FavoritesController {
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 10,
   ) {
-    const result = await this.favoritesService.findAll(userId, page, limit);
-    return {
-      success: true,
-      message: 'Se ha obtenido todos los favoritos del usuario exitosamente',
-      data: result.favorites,
-      meta: {
-        page: page,
-        limit: limit,
-        total: result.total,
-      },
-    };
+    return await this.favoritesService.findAll(userId, page, limit);
   }
 
   @Patch(':id')
@@ -53,11 +38,6 @@ export class FavoritesController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateFavoriteDto: UpdateFavoriteDto,
   ) {
-    const result = await this.favoritesService.update(id, updateFavoriteDto);
-    return {
-      success: true,
-      message: `Se ha actualizado el estado de favorito a ${updateFavoriteDto.is_favorite ? 'Activado' : 'Desactivado'}`,
-      data: result,
-    };
+    return await this.favoritesService.update(id, updateFavoriteDto);
   }
 }

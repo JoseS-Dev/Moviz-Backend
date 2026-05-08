@@ -22,12 +22,7 @@ export class RoomController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createRoomDto: CreateRoomDto) {
-    const result = await this.roomService.create(createRoomDto);
-    return {
-      success: true,
-      message: 'Se ha creado la sala exitosamente',
-      data: result,
-    };
+    return await this.roomService.create(createRoomDto);
   }
 
   @Get()
@@ -35,27 +30,12 @@ export class RoomController {
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 10,
   ) {
-    const result = await this.roomService.findAll(page, limit);
-    return {
-      success: true,
-      message: 'Se ha obtenidos las salas exitosamente',
-      data: result.rooms,
-      meta: {
-        page: Number(page),
-        limit: Number(limit),
-        total: result.total,
-      },
-    };
+    return await this.roomService.findAll(page, limit);
   }
 
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
-    const result = await this.roomService.findOne(id);
-    return {
-      success: true,
-      message: 'Se ha obtenido la información de la sala exitosamente',
-      data: result,
-    };
+    return await this.roomService.findOne(id);
   }
 
   @Patch(':id')
@@ -63,12 +43,7 @@ export class RoomController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateRoomDto: UpdateRoomDto,
   ) {
-    const result = await this.roomService.update(id, updateRoomDto);
-    return {
-      success: true,
-      message: 'Se ha actualidado la sala exitosamente',
-      data: result,
-    };
+    return await this.roomService.update(id, updateRoomDto);
   }
 
   @Patch(':id/status')
@@ -76,21 +51,11 @@ export class RoomController {
     @Param('id', ParseIntPipe) id: number,
     @Body('isActive') isActive: boolean,
   ) {
-    const result = await this.roomService.changeStatus(id, isActive);
-    return {
-      success: true,
-      message: `se ha cambiado el estado de la sala ${isActive ? 'Activado' : 'Desactivado'}`,
-      data: result,
-    };
+    return await this.roomService.changeStatus(id, isActive);
   }
 
   @Delete(':id')
   async remove(@Param('id', ParseIntPipe) id: number) {
-    const result = await this.roomService.remove(id);
-    return {
-      success: true,
-      message: 'Se ha eliminado la sala exitosamente',
-      data: result,
-    };
+    return await this.roomService.remove(id);
   }
 }
