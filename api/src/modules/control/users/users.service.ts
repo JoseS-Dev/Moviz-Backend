@@ -28,6 +28,11 @@ export class UsersService {
         ...createUserDto,
         password_hash: hashed,
       },
+      include: {
+        reviews: true,
+        bookings: true,
+        promotions: true,
+      },
     });
     if (!newUser) throw new BadRequestException('No se pudo crear el usuario.');
     return newUser;
@@ -49,6 +54,14 @@ export class UsersService {
     const users = await this.prisma.users.findMany({
       skip: skip,
       take: limit,
+      orderBy: {
+        created_at: 'desc',
+      },
+      include: {
+        reviews: true,
+        bookings: true,
+        promotions: true,
+      },
     });
     return { users, total: totalUsers };
   }
