@@ -6,7 +6,6 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '../../../../prisma.service.js';
 import { JwtService } from '@nestjs/jwt';
-import { SessionAutheticationResponse } from '../session.constants.js';
 import { settings } from '../../../../../config/settings.config.js';
 
 // Clase del middleware de autenticación de sesión

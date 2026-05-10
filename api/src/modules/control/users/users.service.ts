@@ -31,7 +31,6 @@ export class UsersService {
       include: {
         reviews: true,
         bookings: true,
-        promotions: true,
       },
     });
     if (!newUser) throw new BadRequestException('No se pudo crear el usuario.');
@@ -60,7 +59,6 @@ export class UsersService {
       include: {
         reviews: true,
         bookings: true,
-        promotions: true,
       },
     });
     return { users, total: totalUsers };

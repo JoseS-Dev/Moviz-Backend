@@ -8,4 +8,5 @@ export const settings = {
   basePath: process.env.BASE_PATH || '/api',
   jwtSecretKey: process.env.JWT_SECRET_KEY,
   corsOrigin: process.env.CORS_ORIGIN || '*',
+  nodeEnv: process.env.NODE_ENV || 'development',
 };

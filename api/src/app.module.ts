@@ -6,10 +6,32 @@ import { CinemaModule } from './modules/cinema/root/root.module.js';
 import { ServicesModule } from './modules/services/root/root.module.js';
 import { ERPModule } from './modules/erp/root/root.module.js';
 import { PrismaService } from './prisma.service.js';
+import { APP_GUARD } from '@nestjs/core';
+import { ThrottlerGuard, ThrottlerModule, seconds } from '@nestjs/throttler';
 
 @Module({
-  imports: [ControlModule, CinemaModule, ServicesModule, ERPModule],
+  imports: [
+    ControlModule, 
+    CinemaModule, 
+    ServicesModule, 
+    ERPModule,
+    ThrottlerModule.forRoot({
+      throttlers: [
+        {
+          ttl: seconds(60),
+          limit: 30,
+        }
+      ]
+    })
+  ],
   controllers: [AppController],
-  providers: [AppService, PrismaService],
+  providers: [
+    AppService, 
+    PrismaService,
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard
+    }
+  ],
 })
 export class AppModule {}
