@@ -1,4 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { 
+  Controller, 
+  Get, 
+  Post, 
+  Body, 
+  Patch, 
+  Param, 
+  Delete,
+  HttpStatus,
+  HttpCode,
+  ParseIntPipe,
+  Query 
+} from '@nestjs/common';
 import { AssignedService } from './assigned.service.js';
 import { CreateAssignedDto } from './dto/create-assigned.dto.js';
 import { UpdateAssignedDto } from './dto/update-assigned.dto.js';
@@ -8,27 +20,30 @@ export class AssignedController {
   constructor(private readonly assignedService: AssignedService) {}
 
   @Post()
-  create(@Body() createAssignedDto: CreateAssignedDto) {
+  @HttpCode(HttpStatus.CREATED)
+  async create(@Body() createAssignedDto: CreateAssignedDto) {
     return this.assignedService.create(createAssignedDto);
   }
 
-  @Get()
-  findAll() {
-    return this.assignedService.findAll();
+  @Get('user/:userId')
+  @HttpCode(HttpStatus.OK)
+  async findAll(
+    @Param('userId', ParseIntPipe) userId: number,
+    @Query('page') page: number  = 1,
+    @Query('size') size: number = 10,
+  ) {
+    return this.assignedService.findAll(userId, page, size);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.assignedService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAssignedDto: UpdateAssignedDto) {
-    return this.assignedService.update(+id, updateAssignedDto);
+  @HttpCode(HttpStatus.OK)
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.assignedService.findOne(id);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.assignedService.remove(+id);
+  @HttpCode(HttpStatus.OK)
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    return this.assignedService.remove(id);
   }
 }
